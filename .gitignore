@@ -1,3 +1,10 @@
+# Examples files
+1.dat
+1.hea
+complex_example.py
+test.db
+test.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

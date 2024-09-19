@@ -1,6 +1,7 @@
 from .root import Root
 
 from .dashboard_view import DashboardView
+from .result_view import ResultView
 
 class View:
     def __init__(self):
@@ -11,6 +12,7 @@ class View:
         self.current_frame = None
 
         self._add_frame(DashboardView, 'dashboard')
+        self._add_frame(ResultView, 'result')
 
     def _add_frame(self, Frame, name):
         self.frames[name] = Frame(self.root, fg_color="transparent")

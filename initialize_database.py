@@ -14,11 +14,12 @@ def initialize_db():
     """)
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS hasil_deteksi_pasien (
+        CREATE TABLE IF NOT EXISTS detection_result (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             pasien_id INTEGER NOT NULL,
-            lead VARCHAR NOT NULL,
-            raw_data TEXT NOT NULL, -- array as JSON
+            lead VARCHAR(8) NOT NULL,
+            filepath VARCHAR(255) NOT NULL,
+            denoised_data TEXT NOT NULL, -- array as JSON
             delineation_result TEXT NOT NULL, -- array as JSON
             detection_result TEXT NOT NULL, -- array of integers as JSON, 1 integer represents 1 beat detection result
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -34,10 +35,11 @@ def seed_db():
     cursor = conn.cursor()
 
     pasiens = [
-        ("Rendy Isdwanta",),
-        ("Isdwanta Rendy",),
-        ("Rendy Rendy",),
-        ("Isdwanta Isdwanta",)
+        ("john doe",),
+        ("jane doe",),
+        ("joni joni",),
+        ("yes papa",),
+        ("budi arie",)
     ]
 
     cursor.executemany("""
@@ -56,7 +58,7 @@ def seed_db():
 
 def main():
     initialize_db()
-    seed_db()
+    # seed_db()
 
 if __name__ == "__main__":
     main() 

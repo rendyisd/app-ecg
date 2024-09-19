@@ -7,21 +7,7 @@ class DashboardView(customtkinter.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # self.test_label = customtkinter.CTkLabel(self, text="ahvsdbasd", font=customtkinter.CTkFont(size=20, weight="bold"))
-        # self.test_label.place(relx=0.5, rely=0.5, anchor="center")
-
-        # self.btn_animated = AnimatedButton(
-        #     master=self,
-        #     text="Animated Button",
-        #     width=200,
-        #     height=40,
-        #     font=('Bahnschrift', 16, 'bold'),
-        #     fg_color="#007BFF",
-        #     on_hover="#0056B3",
-        #     transition_delay=100,
-        # )
-
-        # self.btn_animated.pack()
+        self.add_pasien_toplevel = None
 
         self.grid_rowconfigure(0, weight=1) # Padding
         self.grid_rowconfigure(1, weight=1)
@@ -70,7 +56,7 @@ class DashboardView(customtkinter.CTkFrame):
 
         self.dropdown_form_pasien = customtkinter.CTkOptionMenu(
             self,
-            values=["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
+            values=[""]
         )
 
         self.btn_add_pasien = AnimatedButton(
@@ -182,3 +168,8 @@ class DashboardView(customtkinter.CTkFrame):
         self.lbl_nama_pasien.pack(anchor="center", pady=(10, 5), padx=10)
         self.entry_nama_pasien.pack(anchor="center", pady=10, padx=10)
         self.btn_submit_add_pasien.pack(anchor="center", pady=(10, 20), padx=10)
+    
+    def destroy_add_pasien_toplevel(self):
+        if self.add_pasien_toplevel is not None:
+            self.add_pasien_toplevel.destroy()
+            self.add_pasien_toplevel = None

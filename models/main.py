@@ -1,4 +1,5 @@
+from .pasien_model import Pasien
 
 class Model:
     def __init__(self) -> None:
-        pass
+        self.pasien = Pasien()

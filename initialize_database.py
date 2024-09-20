@@ -18,7 +18,7 @@ def initialize_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             pasien_id INTEGER NOT NULL,
             lead VARCHAR(8) NOT NULL,
-            filepath VARCHAR(255) NOT NULL,
+            dirname VARCHAR(255) NOT NULL,
             denoised_data TEXT NOT NULL, -- array as JSON
             delineation_result TEXT NOT NULL, -- array as JSON
             detection_result TEXT NOT NULL, -- array of integers as JSON, 1 integer represents 1 beat detection result

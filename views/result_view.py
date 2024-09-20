@@ -2,24 +2,46 @@ import customtkinter
 
 import matplotlib.pyplot as plt
 
+from matplotlib.figure import Figure
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from .animated_button import AnimatedButton
 
 class ResultView(customtkinter.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
 
-        # fig = plt.Figure(figsize=(28, 4), dpi=100)
-        # ax = fig.add_subplot(111)
-        # ax.plot([0, 1, 2, 3], [10, 1, 4, 9], label="Line")
-        # ax.set_title("Sample Plot")
-        # ax.set_xlabel("X-axis")
-        # ax.set_ylabel("Y-axis")
-        # ax.legend()
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
 
-        # canvas = FigureCanvasTkAgg(fig, master=self)  # A canvas for embedding the figure
-        # canvas.draw()  # Drawing the canvas
-        # canvas.get_tk_widget().pack(fill="both", expand=True)
+        self.grid_columnconfigure(0, weight=1)
+
+        self._font_form_fieldname = customtkinter.CTkFont(
+            family="Bahnschrift",
+            size=16,
+            weight="bold"
+        )
+
+        self.canvas = FigureCanvasTkAgg(Figure(figsize=(28, 5)), master=self) # placeholder
+        self.canvas.get_tk_widget().grid(row=0, column=0, padx=50, pady=50, sticky="nsew")
+
+        self.btn = AnimatedButton(
+            master=self,
+            text="Testing",
+            font=self._font_form_fieldname,
+            fg_color="#007BFF",
+            on_hover="#0056B3",
+            transition_delay=100
+        )
+
+        self.btn.grid(row=1, column=0, sticky="n")
+
+    
+    def new_canvas(self, fig):
+        self.canvas.get_tk_widget().destroy()
+
+        self.canvas = FigureCanvasTkAgg(fig, master=self)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=0, padx=50, pady=50, sticky="nsew")
 
         

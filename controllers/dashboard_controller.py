@@ -1,7 +1,8 @@
 import os
 import shutil
-from datetime import datetime
+import json
 
+from datetime import datetime
 from tkinter import filedialog
 from models.pasien_model import Pasien
 from models.detection_result_model import DetectionResult
@@ -12,9 +13,10 @@ from detection.detection import detection
 from detection import util_func
 
 class DashboardController:
-    def __init__(self, model, view):
+    def __init__(self, model, view, result_controller):
         self.model = model
         self.view = view
+        self.result_controller = result_controller
 
         self.frame = self.view.frames["dashboard"]
 
@@ -50,6 +52,8 @@ class DashboardController:
         self.frame.btn_hea_file.configure(command=self.unselect_hea_file)
 
         self.frame.btn_start_detect.configure(command=self.start_detection)
+
+        self.frame.btn_test.configure(command=self.test_button)
     
     def _load_pasien(self):
         all_pasien = Pasien.get_all()
@@ -139,10 +143,27 @@ class DashboardController:
         shutil.copy(self.selected_dat_path, new_dat_path)
         shutil.copy(self.selected_hea_path, new_hea_path)
 
-        detection(os.path.splitext(new_dat_path)[0], lead, result_root)
+        denoised_beats, delineations, beat_interpretations = detection(os.path.splitext(new_dat_path)[0], lead, result_root)
+
+        detection_result = DetectionResult.create(
+            pasien,
+            lead,
+            basename_format,
+            denoised_beats,
+            delineations,
+            beat_interpretations
+        )
+
+        self.result_controller.load_result(detection_result)
 
         self.view.switch('result')
+        
+        
+    def test_button(self):
+        detection_result = DetectionResult.get_by_id(1)
 
-        # return DetectionResult.create(pasien, lead, basename_format,d, d, d)
-        
-        
+        # print(json.loads(json.loads(detection_result.detection_result)))
+
+        self.result_controller.load_result(detection_result)
+        self.view.switch('result') 
+

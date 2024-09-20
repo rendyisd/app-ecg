@@ -164,6 +164,9 @@ def calculate_snr(original_signal, denoised_signal):
 
 
 def find_island_boundaries(arr, island_value, include_stop=True):
+    if isinstance(arr, list):
+        arr = np.array(arr)
+        
     extended_arr = np.r_[False, arr == island_value, False]
 
     transition_indices = np.flatnonzero(extended_arr[:-1] != extended_arr[1:])

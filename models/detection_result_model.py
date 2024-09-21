@@ -63,9 +63,9 @@ class DetectionResult:
             pasien=pasien,
             lead=row[2],
             dirname=row[3],
-            denoised_data=json.loads(json.loads(row[4])),
-            delineation_result=json.loads(json.loads(row[5])),
-            detection_result=json.loads(json.loads(row[6]))
+            denoised_data=json.loads(row[4]),
+            delineation_result=json.loads(row[5]),
+            detection_result=json.loads(row[6])
         ) for row in rows]
 
     @staticmethod
@@ -83,9 +83,9 @@ class DetectionResult:
                 pasien=Pasien.get_by_id(row[1]),
                 lead=row[2],
                 dirname=row[3],
-                denoised_data=json.loads(json.loads(row[4])),
-                delineation_result=json.loads(json.loads(row[5])),
-                detection_result=json.loads(json.loads(row[6]))
+                denoised_data=json.loads(row[4]),
+                delineation_result=json.loads(row[5]),
+                detection_result=json.loads(row[6])
             )
         return None
 

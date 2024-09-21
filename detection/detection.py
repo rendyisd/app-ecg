@@ -122,7 +122,7 @@ def detection(record_path, lead, result_root_path):
             denoised_beat,
             delineation,
             beat_interpretation,
-            f"{os.path.basename(os.path.normpath(result_root_path))}_{i}",
+            f"{os.path.basename(os.path.normpath(result_root_path))}_{i+1}",
             os.path.join(result_root_path, "result")
         )
     
@@ -153,9 +153,6 @@ def plot_jpoint_baseline(
     baseline_amp = np.mean(util_func.moving_average(denoised_beat[tp_segment[0]:tp_segment[1]+1], 50))
 
     fig, ax = plt.subplots(figsize=(28, 5))
-    
-    fig.suptitle(f"{unique_name}", fontsize=24, y=1.02)
-    ax.set_title(f"J-point ({j_point_amp:.5f}) - Baseline ({baseline_amp:.5f}) = {j_point_amp-baseline_amp:.5f} ({NUM_TO_INTERPRETATION[beat_interpretation]})", pad=10)
 
     ECGSignal.plot_signal_segments(denoised_beat, delineation, ax=ax)
 
@@ -180,7 +177,13 @@ def plot_jpoint_baseline(
     ax.grid()
 
     if save_dir:
+        fig.suptitle(f"{unique_name}", fontsize=24, y=1.02)
+        ax.set_title(f"J-point ({j_point_amp:.5f}) - Baseline ({baseline_amp:.5f}) = {j_point_amp-baseline_amp:.5f} ({NUM_TO_INTERPRETATION[beat_interpretation]})", pad=10)
+        
         fig.savefig(os.path.join(save_dir, f"{unique_name}"), bbox_inches='tight')
+    else:
+        fig.suptitle(f"{unique_name}", fontsize=24)
+        ax.set_title(f"J-point ({j_point_amp:.5f}) - Baseline ({baseline_amp:.5f}) = {j_point_amp-baseline_amp:.5f} ({NUM_TO_INTERPRETATION[beat_interpretation]})")
 
     fig.tight_layout()
     
@@ -193,9 +196,6 @@ def plot_all_detection(denoised_beats, beat_interpretations, unique_name, save_d
     beat_plot_colors = ['blue', 'red', 'limegreen']
 
     ax.plot(denoised_beats, color='blue', linewidth=1)
-
-    # if not isinstance(beat_interpretations[0], tuple):
-    #     beat_interpretations = [(item[0], tuple(item[1])) for item in beat_interpretations]
 
     for interpretation, beat_start_end in beat_interpretations:
         if (interpretation == INTERPRETATION_TO_NUM['ST-elevation']) \

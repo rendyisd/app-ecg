@@ -162,8 +162,6 @@ class DashboardController:
     def test_button(self):
         detection_result = DetectionResult.get_by_id(1)
 
-        # print(json.loads(json.loads(detection_result.detection_result)))
-
         self.result_controller.load_result(detection_result)
         self.view.switch('result') 
 

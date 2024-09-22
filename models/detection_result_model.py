@@ -1,7 +1,6 @@
 import json
 
 from controllers.database import Database
-from models.pasien_model import Pasien
 
 class DetectionResult:
     def __init__(self, id, pasien, lead, dirname, denoised_data, delineation_result, detection_result):
@@ -70,6 +69,8 @@ class DetectionResult:
 
     @staticmethod
     def get_by_id(id):
+        from models.pasien_model import Pasien
+        
         conn = Database.get_db_connection()
         cursor = conn.cursor()
 
@@ -88,6 +89,13 @@ class DetectionResult:
                 detection_result=json.loads(row[6])
             )
         return None
+    
+    def delete(self):
+        conn = Database.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM detection_result WHERE id = ?", (self.id,))
+        conn.commit()
 
     def __repr__(self) -> str:
         return f"""

@@ -13,10 +13,10 @@ from detection.detection import detection
 from detection import util_func
 
 class DashboardController:
-    def __init__(self, model, view, result_controller):
+    def __init__(self, model, view, controller):
         self.model = model
         self.view = view
-        self.result_controller = result_controller
+        self.controller = controller
 
         self.frame = self.view.frames["dashboard"]
 
@@ -40,7 +40,7 @@ class DashboardController:
         }
 
         self._bind()
-        self._load_pasien()
+        self.load_pasien()
 
     def _bind(self):
         self.view.root.btn_slide_panel.configure(command=self.view.root.main_slide_panel.animate)
@@ -52,19 +52,16 @@ class DashboardController:
         self.frame.btn_hea_file.configure(command=self.unselect_hea_file)
 
         self.frame.btn_start_detect.configure(command=self.start_detection)
-
-        self.frame.btn_test.configure(command=self.test_button)
     
-    def _load_pasien(self):
+    def load_pasien(self):
         all_pasien = Pasien.get_all()
         
-        if len(all_pasien) > 0:
-            for pasien in all_pasien:
-                option_str = f"{pasien.id} - {pasien.nama.title()}"
-                self.pasien_options_to_pasien[option_str] = pasien
-            
-            self.frame.dropdown_form_pasien.configure(values=self.pasien_options_to_pasien.keys())
-            self.frame.dropdown_form_pasien.set(f"{all_pasien[0].id} - {all_pasien[0].nama.title()}")
+        for pasien in all_pasien:
+            option_str = f"{pasien.id} - {pasien.nama.title()}"
+            self.pasien_options_to_pasien[option_str] = pasien
+        
+        self.frame.dropdown_form_pasien.configure(values=self.pasien_options_to_pasien.keys())
+        self.frame.dropdown_form_pasien.set(f"{all_pasien[0].id} - {all_pasien[0].nama.title()}")
 
 
     def add_pasien_toplevel_wrapper(self):
@@ -80,15 +77,9 @@ class DashboardController:
             _ = ErrorPopup(self.frame.add_pasien_toplevel, e_msg)
             return
 
-        new_pasien = self.model.pasien.create(entry_value)
+        self.model.pasien.create(entry_value)
 
-        option_str = f"{new_pasien.id} - {new_pasien.nama.title()}"
-        self.pasien_options_to_pasien[option_str] = new_pasien
-
-        self.frame.dropdown_form_pasien.configure(values=self.pasien_options_to_pasien.keys())
-
-        if self.frame.dropdown_form_pasien.get() == "":
-            self.frame.dropdown_form_pasien.set(f"{new_pasien.id} - {new_pasien.nama.title()}")
+        self.load_pasien()
 
         self.frame.destroy_add_pasien_toplevel()
     
@@ -154,14 +145,8 @@ class DashboardController:
             beat_interpretations
         )
 
-        self.result_controller.load_result(detection_result)
+        self.controller.result_controller.load_result(detection_result)
+        self.controller.slide_panel_controller.load_results()
 
         self.view.switch('result')
-        
-        
-    def test_button(self):
-        detection_result = DetectionResult.get_by_id(1)
-
-        self.result_controller.load_result(detection_result)
-        self.view.switch('result') 
 

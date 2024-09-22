@@ -144,9 +144,8 @@ class ResultView(customtkinter.CTkFrame):
         self.canvas_toplevel.get_tk_widget().grid(row=0, column=0, columnspan=3, padx=50, pady=(50, 25), sticky="nsew")
     
     def load_other_results_button(self, results, event_handler):
-        if len(self.other_result_btn) != 0:
-            for button in self.other_result_btn:
-                button.destroy()
+        for button in self.other_result_btn:
+            button.destroy()
         
         self.other_result_btn = []
         for result in results:

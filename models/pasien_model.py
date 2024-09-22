@@ -60,8 +60,15 @@ class Pasien:
         conn.commit()
     
     def delete(self):
+        from models.detection_result_model import DetectionResult
+
         conn = Database.get_db_connection()
         cursor = conn.cursor()
+
+        results = DetectionResult.get_by_pasien(self)
+
+        for result in results:
+            result.delete()
 
         cursor.execute("DELETE FROM pasien WHERE id = ?", (self.id,))
         conn.commit()

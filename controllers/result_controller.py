@@ -113,6 +113,7 @@ class ResultController:
         self.frame.if_lbl_2.configure(text=f"ID Hasil: {str(detection_result.id)}")
         self.frame.if_lbl_3.configure(text=f"Nama Pasien: {detection_result.pasien.nama.title()}")
         self.frame.if_lbl_4.configure(text=f"Lead: {util_func.get_lead_display_name(detection_result.lead)}")
-        
+    
     def other_result_btn_event_handler(self, result):
         self.load_result(result)
+        self.view.switch("result")

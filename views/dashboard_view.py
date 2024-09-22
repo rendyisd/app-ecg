@@ -142,17 +142,7 @@ class DashboardView(customtkinter.CTkFrame):
         self.btn_dat_file.grid(row=6, column=1, padx=(0, 5), sticky="ns")
         self.btn_hea_file.grid(row=6, column=2, padx=(5, 0), sticky="ns")
 
-        self.btn_start_detect.grid(row=7, column=1, pady=10, columnspan=1, sticky="s")
-        
-        self.btn_test = AnimatedButton(
-            master=self,
-            text="Testing",
-            font=self._font_form_fieldname,
-            fg_color="#007BFF",
-            on_hover="#0056B3",
-            transition_delay=100
-        )
-        self.btn_test.grid(row=7, column=2, pady=10, columnspan=1, sticky="s")
+        self.btn_start_detect.grid(row=7, column=1, pady=10, columnspan=2, sticky="s")
 
     def create_add_pasien_toplevel(self):
         self.add_pasien_toplevel = customtkinter.CTkToplevel(self)

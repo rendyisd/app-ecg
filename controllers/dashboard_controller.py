@@ -54,6 +54,8 @@ class DashboardController:
         self.frame.btn_start_detect.configure(command=self.start_detection)
     
     def load_pasien(self):
+        self.pasien_options_to_pasien = {}
+
         all_pasien = Pasien.get_all()
         
         for pasien in all_pasien:
@@ -61,7 +63,12 @@ class DashboardController:
             self.pasien_options_to_pasien[option_str] = pasien
         
         self.frame.dropdown_form_pasien.configure(values=self.pasien_options_to_pasien.keys())
-        self.frame.dropdown_form_pasien.set(f"{all_pasien[0].id} - {all_pasien[0].nama.title()}")
+
+        if len(all_pasien) > 0:
+            self.frame.dropdown_form_pasien.set(f"{all_pasien[0].id} - {all_pasien[0].nama.title()}")
+        
+        else:
+            self.frame.dropdown_form_pasien.set("")
 
 
     def add_pasien_toplevel_wrapper(self):
@@ -95,7 +102,7 @@ class DashboardController:
                 self.selected_hea_path = file_path
                 self.frame.btn_hea_file.configure(text=f"{file_path.split('/')[-1]}")
             else:
-                print("Invalid file selected")
+                _ = ErrorPopup(self.view.root, "Error: File yang dipilih tidak valid!")
     
     def unselect_dat_file(self):
         if self.selected_dat_path:
@@ -108,16 +115,32 @@ class DashboardController:
             self.frame.btn_hea_file.configure(text="Tidak ada file .hea yang dipilih")
 
     def start_detection(self):
-        '''
-        "pasien" : Pasien
-        "lead" : str
-        "new_dat_path" : str
-        "new_hea_path" : str
-        '''
+        pasien_option = self.frame.dropdown_form_pasien.get()
+        lead_option = self.frame.dropdown_form_lead.get()
+
+        if pasien_option == "":
+            _ = ErrorPopup(self.view.root, "Error: Tidak ada pasien yang dipilih!")
+            return
+        
+        elif lead_option == "":
+            _ = ErrorPopup(self.view.root, "Error: Tidak ada pasien yang dipilih!")
+            return
+        
+        elif not self.selected_dat_path:
+            _ = ErrorPopup(self.view.root, "Error: Tidak ada file .dat yang dipilih!")
+            return
+        
+        elif not self.selected_hea_path:
+            _ = ErrorPopup(self.view.root, "Error: Tidak ada file .hea yang dipilih!")
+            return
+        
+        elif os.path.splitext(os.path.basename(self.selected_dat_path))[0] !=\
+            os.path.splitext(os.path.basename(self.selected_hea_path))[0]:
+            _ = ErrorPopup(self.view.root, "Error: File .dat dan .hea yang dipilih tidak sama!")
+            return
         
         pasien = self.pasien_options_to_pasien[self.frame.dropdown_form_pasien.get()]
 
-        lead_option = self.frame.dropdown_form_lead.get()
         lead = self.lead_options_to_lead[lead_option]
 
         pasien_dir = os.path.join("bin", f"{pasien.id}_{pasien.nama}")

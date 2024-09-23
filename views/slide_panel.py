@@ -8,6 +8,7 @@ class SlidePanel(customtkinter.CTkFrame):
         super().__init__(master=master, corner_radius=0)
 
         self.all_result_btn = []
+        self.hapus_toplevel = None
 
         self.start_pos = start_pos
         self.end_pos = end_pos
@@ -96,7 +97,7 @@ class SlidePanel(customtkinter.CTkFrame):
 
         self.all_result_btn.append(btn)
     
-    def hapus_toplevel(self):
+    def create_hapus_toplevel(self):
         self.hapus_toplevel = customtkinter.CTkToplevel(self)
         self.hapus_toplevel.title("Hapus")
         self.hapus_toplevel.geometry(f"{550}x{290}")

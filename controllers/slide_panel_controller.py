@@ -1,7 +1,11 @@
+import shutil
+import os
+
 from models.pasien_model import Pasien
 from models.detection_result_model import DetectionResult
 
 from detection.util_func import get_lead_display_name
+from views.error_popup import ErrorPopup
 
 class SlidePanelController:
     def __init__(self, model, view, controller):
@@ -26,13 +30,14 @@ class SlidePanelController:
         self.view.switch("dashboard")
     
     def hapus_toplevel_wrapper(self):
-        self.frame.hapus_toplevel()
-        self.active_btn = "pasien"
+        self.frame.create_hapus_toplevel()
 
+        self.active_btn = "pasien"
         self.choose_hapus_pasien() # set default active state
 
         self.frame.btn_pasien.configure(command=self.choose_hapus_pasien)
         self.frame.btn_result.configure(command=self.choose_hapus_result)
+        self.frame.btn_submit_hapus.configure(command=self.submit_hapus)
     
     def load_results(self):
         for btn in self.frame.all_result_btn:
@@ -53,6 +58,7 @@ class SlidePanelController:
         self.view.switch("result")
 
     def choose_hapus_pasien(self):
+        self.pasien_options_to_pasien = {}
         state = {
             "active": ["#007BFF", "#E53935"],
             "inactive": ["#E53935", "#007BFF"]
@@ -74,8 +80,12 @@ class SlidePanelController:
 
         if len(self.pasien_options_to_pasien) > 0:
             self.frame.dropdown_items.set(f"{list(self.pasien_options_to_pasien.keys())[0]}")
+        
+        else:
+            self.frame.dropdown_items.set("")
 
     def choose_hapus_result(self):
+        self.result_options_to_result = {}
         state = {
             "active": ["#007BFF", "#E53935"],
             "inactive": ["#E53935", "#007BFF"]
@@ -102,3 +112,50 @@ class SlidePanelController:
 
         if len(self.result_options_to_result) > 0:
             self.frame.dropdown_items.set(f"{list(self.result_options_to_result.keys())[0]}")
+        
+        else:
+            self.frame.dropdown_items.set("")
+    
+    def submit_hapus(self):
+        option = self.frame.dropdown_items.get()
+
+        if option == "":
+            _ = ErrorPopup(self.frame.hapus_toplevel, "Error: Tidak ada opsi yang dipilih!")
+            return
+
+        if self.active_btn == "pasien":
+            pasien_to_delete = self.pasien_options_to_pasien[option]
+
+            pasien_results = DetectionResult.get_by_pasien(pasien_to_delete)
+
+            # delete pasien results
+            for result in pasien_results:
+                result.delete()
+            
+            pasien_dir = os.path.join("bin", f"{pasien_to_delete.id}_{pasien_to_delete.nama}")
+
+            if os.path.exists(pasien_dir):
+                shutil.rmtree(pasien_dir)
+            else:
+                print("Directory does not exist.")
+
+            pasien_to_delete.delete()
+
+        elif self.active_btn == "result":
+            result_to_delete = self.result_options_to_result[option]
+
+            result_dir = os.path.join("bin", f"{result_to_delete.pasien.id}_{result_to_delete.pasien.nama}", result_to_delete.dirname)
+
+            if os.path.exists(result_dir):
+                shutil.rmtree(result_dir)
+            else:
+                print("Directory does not exist.")
+
+            result_to_delete.delete()
+        
+        # reload
+        self.controller.dashboard_controller.load_pasien()
+        self.load_results()
+        self.view.switch("dashboard") # i dont know how to reload result_view if the current laoded result is deleted so just load dashboard lol
+
+        self.frame.destroy_hapus_toplevel()

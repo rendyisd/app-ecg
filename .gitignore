@@ -7,6 +7,7 @@ test.py
 
 bin/*
 detection/delineation-models
+detection.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

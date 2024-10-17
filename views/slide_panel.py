@@ -110,9 +110,16 @@ class SlidePanel(customtkinter.CTkFrame):
         self.center_frame.grid_rowconfigure(0, weight=1)
         self.center_frame.grid_rowconfigure(1, weight=1)
         self.center_frame.grid_rowconfigure(2, weight=1)
+        self.center_frame.grid_rowconfigure(3, weight=1)
 
         self.center_frame.grid_columnconfigure(0, weight=1)
         self.center_frame.grid_columnconfigure(1, weight=2)
+
+        self.lbl_hapus = customtkinter.CTkLabel(
+            self.center_frame,
+            text="Hapus",
+            font=("Bahnschrift", 16, "bold")
+        )
 
         self.btn_pasien = customtkinter.CTkButton(
             self.center_frame,
@@ -141,10 +148,11 @@ class SlidePanel(customtkinter.CTkFrame):
             transition_delay=100
         )
 
-        self.btn_pasien.grid(row=0, column=0, columnspan=1, padx=5, pady=5)
-        self.btn_result.grid(row=0, column=1, columnspan=1, padx=5, pady=5)
-        self.dropdown_items.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
-        self.btn_submit_hapus.grid(row=2, column=0, columnspan=2)
+        self.lbl_hapus.grid(row=0, column=0, columnspan=2, pady=10)
+        self.btn_pasien.grid(row=1, column=0, columnspan=1, padx=5, pady=5)
+        self.btn_result.grid(row=1, column=1, columnspan=1, padx=5, pady=5)
+        self.dropdown_items.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
+        self.btn_submit_hapus.grid(row=3, column=0, columnspan=2)
     
     def destroy_hapus_toplevel(self):
         if self.hapus_toplevel is not None:

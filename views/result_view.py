@@ -14,55 +14,23 @@ class ResultView(customtkinter.CTkFrame):
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
         self.other_result_btn = []
 
-        self.canvas = FigureCanvasTkAgg(Figure(figsize=(28, 5)), master=self) # placeholder
-
-        self.info_frame = customtkinter.CTkFrame(
-            self,
-            fg_color="#333333",
-            corner_radius=20,
-        )
-        self.info_frame.grid_rowconfigure(0, weight=1)
-        self.info_frame.grid_rowconfigure(1, weight=1)
-        self.info_frame.grid_rowconfigure(2, weight=1)
-        self.info_frame.grid_rowconfigure(3, weight=1)
-        self.info_frame.grid_rowconfigure(4, weight=1)
-
-        self.info_frame.grid_columnconfigure(0, weight=1)
-        self.info_frame.grid_columnconfigure(1, weight=1)
-
-        self.if_lbl_1 = customtkinter.CTkLabel(
-            self.info_frame,
-            text="ID Pasien: ",
-            font=("Bahnschrift", 14)
-        )
-        self.if_lbl_2 = customtkinter.CTkLabel(
-            self.info_frame,
-            text="ID Hasil: ",
-            font=("Bahnschrift", 14)
-        )
-        self.if_lbl_3 = customtkinter.CTkLabel(
-            self.info_frame,
-            text="Nama Pasien: ",
-            font=("Bahnschrift", 14)
-        )
-        self.if_lbl_4 = customtkinter.CTkLabel(
-            self.info_frame,
-            text="Lead: ",
-            font=("Bahnschrift", 14)
-        )
-        self.if_btn_each_beat = AnimatedButton(
-            master=self.info_frame,
+        self.canvas = FigureCanvasTkAgg(Figure(figsize=(28, 4)), master=self) # placeholder
+        
+        self.btn_each_beat = AnimatedButton(
+            master=self,
             text="Detail Deteksi Setiap Beat",
             font=("Bahnschrift", 12, "bold"),
             fg_color="#007BFF",
             on_hover="#0056B3",
-            transition_delay=100
+            transition_delay=100,
+            height=70
         )
 
         self.other_result_frame = customtkinter.CTkScrollableFrame(
@@ -71,16 +39,11 @@ class ResultView(customtkinter.CTkFrame):
             corner_radius=20,
         )
 
-        self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=2, padx=50, pady=(50, 0), sticky="nsew")
+        self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=2, sticky="nsew")
 
-        self.info_frame.grid(row=1, column=0, columnspan=1, padx=(25, 12), pady=25, sticky="nsew")
-        self.if_lbl_1.grid(row=0, column=0, columnspan=2, sticky="w", padx=10)
-        self.if_lbl_2.grid(row=1, column=0, columnspan=2, sticky="w", padx=10)
-        self.if_lbl_3.grid(row=2, column=0, columnspan=2, sticky="w", padx=10)
-        self.if_lbl_4.grid(row=3, column=0, columnspan=2, sticky="w", padx=10)
-        self.if_btn_each_beat.grid(row=4, column=0, columnspan=2, sticky="ew", padx=10)
+        self.btn_each_beat.grid(row=1, column=0, columnspan=2, padx=30, pady=(20, 10), sticky="ew")
 
-        self.other_result_frame.grid(row=1, column=1, columnspan=1, padx=(12, 25), pady=25, sticky="nsew")
+        self.other_result_frame.grid(row=2, column=0, columnspan=2, padx=30, pady=(10, 25), sticky="nsew")
 
     
     def new_canvas(self, fig):
@@ -151,7 +114,7 @@ class ResultView(customtkinter.CTkFrame):
         for result in results:
             btn = AnimatedButton(
                 master=self.other_result_frame,
-                text=f"{result.id} - Lead {get_lead_display_name(result.lead)}",
+                text=f"{result.dirname}",
                 font=("Bahnschrift", 14),
                 fg_color="#2A2A2A",
                 on_hover="#242424",

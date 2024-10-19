@@ -19,7 +19,7 @@ class ResultController:
         self._bind()
 
     def _bind(self):
-        self.frame.if_btn_each_beat.configure(command=self.beat_toplevel_wrapper)
+        self.frame.btn_each_beat.configure(command=self.beat_toplevel_wrapper)
     
     def beat_toplevel_wrapper(self):
         self.frame.create_beat_toplevel()
@@ -45,7 +45,7 @@ class ResultController:
             self.denoised_beats[self.curr_figure_idx],
             self.delineations[self.curr_figure_idx],
             self.beat_interpretations[self.curr_figure_idx],
-            f"{self.result.dirname}_{self.curr_figure_idx + 1}"
+            f"{self.result.dirname} - Beat {self.curr_figure_idx + 1}"
         )
         self.frame.new_canvas_toplevel(
             self.curr_figure
@@ -66,7 +66,7 @@ class ResultController:
             self.denoised_beats[self.curr_figure_idx],
             self.delineations[self.curr_figure_idx],
             self.beat_interpretations[self.curr_figure_idx],
-            f"{self.result.dirname}_{self.curr_figure_idx + 1}"
+            f"{self.result.dirname} - Beat {self.curr_figure_idx + 1}"
         )
         self.frame.new_canvas_toplevel(
             self.curr_figure
@@ -84,7 +84,7 @@ class ResultController:
             self.denoised_beats[self.curr_figure_idx],
             self.delineations[self.curr_figure_idx],
             self.beat_interpretations[self.curr_figure_idx],
-            f"{self.result.dirname}_{self.curr_figure_idx + 1}"
+            f"{self.result.dirname} - Beat {self.curr_figure_idx + 1}"
         )
         self.frame.new_canvas_toplevel(
             self.curr_figure
@@ -93,7 +93,7 @@ class ResultController:
     def load_result(self, detection_result: DetectionResult):
         self.result = detection_result
 
-        self.other_results = DetectionResult.get_by_pasien(self.result.pasien)
+        self.other_results = DetectionResult.get_by_record(self.result.record)
         self.frame.load_other_results_button(self.other_results, self.other_result_btn_event_handler)
 
         if self.fig:
@@ -108,11 +108,6 @@ class ResultController:
         self.curr_figure_idx = 0
 
         self.frame.new_canvas(self.fig)
-
-        self.frame.if_lbl_1.configure(text=f"ID Pasien: {str(detection_result.pasien.id)}")
-        self.frame.if_lbl_2.configure(text=f"ID Hasil: {str(detection_result.id)}")
-        self.frame.if_lbl_3.configure(text=f"Nama Pasien: {detection_result.pasien.nama.title()}")
-        self.frame.if_lbl_4.configure(text=f"Lead: {util_func.get_lead_display_name(detection_result.lead)}")
     
     def other_result_btn_event_handler(self, result):
         self.load_result(result)

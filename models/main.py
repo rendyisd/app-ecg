@@ -1,5 +1,5 @@
-from .pasien_model import Pasien
+from .record_model import Record
 
 class Model:
     def __init__(self) -> None:
-        self.pasien = Pasien()
+        self.record = Record()

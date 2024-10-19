@@ -122,15 +122,15 @@ def detection(record_path, lead, result_root_path):
             denoised_beat,
             delineation,
             beat_interpretation,
-            f"{os.path.basename(os.path.normpath(result_root_path))}_{i+1}",
-            os.path.join(result_root_path, "result")
+            f"{os.path.basename(os.path.normpath(result_root_path))} - Beat {i+1}",
+            result_root_path
         )
     
     plot_all_detection(
         denoised_beats,
         beat_interpretations,
         os.path.basename(os.path.normpath(result_root_path)),
-        os.path.join(result_root_path, "result")
+        result_root_path
     )
 
     return denoised_beats, delineations, beat_interpretations
@@ -191,7 +191,7 @@ def plot_jpoint_baseline(
 
 
 def plot_all_detection(denoised_beats, beat_interpretations, unique_name, save_dir=None):
-    fig, ax = plt.subplots(figsize=(28, 5))
+    fig, ax = plt.subplots(figsize=(28, 4))
 
     beat_plot_colors = ['blue', 'red', 'limegreen']
 

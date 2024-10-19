@@ -36,7 +36,7 @@ class SlidePanel(customtkinter.CTkFrame):
 
         self.btn_dashboard = AnimatedButton(
             master=self,
-            text="Tambahkan",
+            text="Deteksi",
             font=("Bahnschrift", 16, "bold"),
             fg_color="#007BFF",
             on_hover="#0056B3",
@@ -81,10 +81,11 @@ class SlidePanel(customtkinter.CTkFrame):
         else:
             self.in_start_pos = True
     
-    def load_result_button(self, result, pasien_name, event_handler):
+    def load_record_button(self, result, record_name, event_handler):
+        # Button will display the first DetectionResult of said record
         btn = AnimatedButton(
             master=self.frame_results,
-            text=f"{pasien_name}\n{result.id} - Lead {get_lead_display_name(result.lead)}",
+            text=f"Record {record_name}",
             font=("Bahnschrift", 12),
             fg_color="#2A2A2A",
             on_hover="#242424",
@@ -121,9 +122,9 @@ class SlidePanel(customtkinter.CTkFrame):
             font=("Bahnschrift", 16, "bold")
         )
 
-        self.btn_pasien = customtkinter.CTkButton(
+        self.btn_record = customtkinter.CTkButton(
             self.center_frame,
-            text="Pasien",
+            text="Record",
             fg_color=["#E53935", "#007BFF"],
             font=("Bahnschrift", 12, "bold"),
         )
@@ -149,7 +150,7 @@ class SlidePanel(customtkinter.CTkFrame):
         )
 
         self.lbl_hapus.grid(row=0, column=0, columnspan=2, pady=10)
-        self.btn_pasien.grid(row=1, column=0, columnspan=1, padx=5, pady=5)
+        self.btn_record.grid(row=1, column=0, columnspan=1, padx=5, pady=5)
         self.btn_result.grid(row=1, column=1, columnspan=1, padx=5, pady=5)
         self.dropdown_items.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
         self.btn_submit_hapus.grid(row=3, column=0, columnspan=2)

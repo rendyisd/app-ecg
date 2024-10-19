@@ -6,9 +6,9 @@ def initialize_db():
     cursor = conn.cursor()
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS pasien (
+        CREATE TABLE IF NOT EXISTS record (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nama TEXT NOT NULL,
+            name VARCHAR(64) UNIQUE NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -16,14 +16,14 @@ def initialize_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS detection_result (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            pasien_id INTEGER NOT NULL,
+            record_id INTEGER NOT NULL,
             lead VARCHAR(8) NOT NULL,
             dirname VARCHAR(255) NOT NULL,
             denoised_data TEXT NOT NULL, -- array as JSON
             delineation_result TEXT NOT NULL, -- array as JSON
             detection_result TEXT NOT NULL, -- array of integers as JSON, 1 integer represents 1 beat detection result
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(pasien_id) REFERENCES pasien(id)
+            FOREIGN KEY(record_id) REFERENCES record(id)
         )
     """)
 
@@ -34,7 +34,7 @@ def seed_db():
     conn = Database.get_db_connection()
     cursor = conn.cursor()
 
-    pasiens = [
+    records = [
         ("john doe",),
         ("jane doe",),
         ("joni joni",),
@@ -43,15 +43,15 @@ def seed_db():
     ]
 
     cursor.executemany("""
-        INSERT OR IGNORE INTO pasien (nama)
+        INSERT OR IGNORE INTO record (name)
         VALUES (?)
-    """, pasiens)
+    """, records)
 
-    cursor.execute("SELECT * FROM pasien")
+    cursor.execute("SELECT * FROM record")
     rows = cursor.fetchall()
 
     for row in rows:
-        print(f"ID: {row[0]}, Nama: {row[1]}, created_at: {row[2]}")
+        print(f"ID: {row[0]}, Name: {row[1]}, created_at: {row[2]}")
 
     conn.commit()
     Database.close_db_connection()

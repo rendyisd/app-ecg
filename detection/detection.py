@@ -104,10 +104,10 @@ def detection(record_path, lead, result_root_path):
         j_point_amp = denoised_beat[st_segment[0]]
         baseline_amp = np.mean(util_func.moving_average(denoised_beat[tp_segment[0]:tp_segment[1]+1], 50))
 
-        if j_point_amp - baseline_amp >= 0.1: # Universal ST elevation rules
+        if j_point_amp - baseline_amp >= 0.1: # j-point above baseline -> st-elevation rule
             beat_interpretation = INTERPRETATION_TO_NUM['ST-elevation']
         
-        elif j_point_amp < baseline_amp: # ST depression rules
+        elif baseline_amp - j_point_amp >= 0.1: # baseline above j-point -> st-depression rule
             beat_interpretation = INTERPRETATION_TO_NUM['ST-depression']
         
         else:
@@ -186,6 +186,8 @@ def plot_jpoint_baseline(
         ax.set_title(f"J-point ({j_point_amp:.5f}) - Baseline ({baseline_amp:.5f}) = {j_point_amp-baseline_amp:.5f} ({NUM_TO_INTERPRETATION[beat_interpretation]})")
 
     fig.tight_layout()
+
+    plt.close()
     
     return fig
 
@@ -229,5 +231,7 @@ def plot_all_detection(denoised_beats, beat_interpretations, unique_name, save_d
         fig.savefig(os.path.join(save_dir, f"{unique_name}"), bbox_inches='tight')
     
     fig.tight_layout()
+
+    plt.close()
 
     return fig
